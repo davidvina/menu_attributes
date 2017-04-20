@@ -3,113 +3,113 @@
 /**
  * Provide the summary information for the menu attributes vertical tabs.
  */
-Drupal.behaviors.menuAttributesOptionsSummary = {
+Backdrop.behaviors.menuAttributesOptionsSummary = {
   attach: function (context) {
     // Menu item title.
-    $('fieldset#edit-title', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-title', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-textarea', context).val();
       if (!value) {
-        return Drupal.t('No title');
+        return Backdrop.t('No title');
       }
       else {
-        return Drupal.checkPlain(value);
+        return Backdrop.checkPlain(value);
       }
     });
 
     // Menu item ID.
-    $('fieldset#edit-id', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-id', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-text', context).val();
       if (!value) {
-        return Drupal.t('No ID');
+        return Backdrop.t('No ID');
       }
       else {
-        return Drupal.checkPlain(value);
+        return Backdrop.checkPlain(value);
       }
     });
 
     // Menu item name.
-    $('fieldset#edit-name', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-name', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-text', context).val();
       if (!value) {
-        return Drupal.t('No name');
+        return Backdrop.t('No name');
       }
       else {
-        return Drupal.checkPlain(value);
+        return Backdrop.checkPlain(value);
       }
     });
 
     // Menu item relationship.
-    $('fieldset#edit-rel', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-rel', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-text', context).val();
       if (!value) {
-        return Drupal.t('No relationship');
+        return Backdrop.t('No relationship');
       }
       else {
-        return Drupal.checkPlain(value);
+        return Backdrop.checkPlain(value);
       }
     });
 
     // Menu item classes.
-    $('fieldset#edit-class', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-class', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-text', context).val();
       if (!value) {
-        return Drupal.t('No classes');
+        return Backdrop.t('No classes');
       }
       else {
-        return Drupal.checkPlain(value.replace(/\s/g, ', '));
+        return Backdrop.checkPlain(value.replace(/\s/g, ', '));
       }
     });
 
     // Menu item style.
-    $('fieldset#edit-style', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-style', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-text', context).val();
       if (!value) {
-        return Drupal.t('No style');
+        return Backdrop.t('No style');
       }
       else {
-        return Drupal.checkPlain(value);
+        return Backdrop.checkPlain(value);
       }
     });
 
     // Menu item target.
-    $('fieldset#edit-target', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-target', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
 
       var value = $('.form-select option:selected', context).text();
-      return Drupal.checkPlain(value);
+      return Backdrop.checkPlain(value);
     });
 
     // Menu item access key.
-    $('fieldset#edit-accesskey', context).drupalSetSummary(function (context) {
+    $('fieldset#edit-accesskey', context).backdropSetSummary(function (context) {
       if (!$('input[type="checkbox"]:checked', context).val()) {
-        return Drupal.t('Disabled');
+        return Backdrop.t('Disabled');
       }
       var value = $('.form-text', context).val();
       if (!value) {
-        return Drupal.t('No access key');
+        return Backdrop.t('No access key');
       }
       else {
-        return Drupal.checkPlain(value);
+        return Backdrop.checkPlain(value);
       }
     });
 

@@ -22,7 +22,7 @@ function menu_attributes_install() {
  * Implements hook_uninstall().
  */
 function menu_attributes_uninstall() {
-  drupal_load('module', 'menu_attributes');
+  backdrop_load('module', 'menu_attributes');
   $attributes = menu_attributes_menu_attribute_info();
   foreach (array_keys($attributes) as $attribute) {
     variable_del("menu_attributes_{$attribute}_enable");

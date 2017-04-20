@@ -10,7 +10,7 @@
 /**
  * Helper test class with some added functions for testing.
  */
-class MenuAttributesTestHelper extends DrupalWebTestCase {
+class MenuAttributesTestHelper extends BackdropWebTestCase {
   protected $admin_user;
   protected $menu_attributes_new;
   protected $menu_attributes_edit;
@@ -21,7 +21,7 @@ class MenuAttributesTestHelper extends DrupalWebTestCase {
     parent::setUp($modules);
 
     // Create and login user.
-    $this->admin_user = $this->drupalCreateUser(array(
+    $this->admin_user = $this->backdropCreateUser(array(
       'administer menu attributes',
       'access administration pages',
       'administer content types',
@@ -66,11 +66,11 @@ class MenuAttributesTestHelper extends DrupalWebTestCase {
   function crudMenuLink($mlid = 0, $plid = 0, $link = '<front>', $menu_name = 'navigation') {
     // View add/edit menu link page.
     if (empty($mlid)) {
-      $this->drupalGet("admin/structure/menu/manage/$menu_name/add");
+      $this->backdropGet("admin/structure/menu/manage/$menu_name/add");
       $menu_attributes = $this->menu_attributes_new;
     }
     else {
-      $this->drupalGet("admin/structure/menu/item/$mlid/edit");
+      $this->backdropGet("admin/structure/menu/item/$mlid/edit");
       $menu_attributes = $this->menu_attributes_edit;
     }
     $this->assertResponse(200);
@@ -94,7 +94,7 @@ class MenuAttributesTestHelper extends DrupalWebTestCase {
     );
 
     // Add menu link.
-    $this->drupalPost(NULL, $edit, t('Save'));
+    $this->backdropPost(NULL, $edit, t('Save'));
 
     $item = db_query('SELECT * FROM {menu_links} WHERE link_title = :title', array(':title' => $title))->fetchAssoc();
 
@@ -136,23 +136,23 @@ class MenuAttributesTestCase extends MenuAttributesTestHelper {
    */
   function testMenuAttributes() {
     // Login the user.
-    $this->drupalLogin($this->admin_user);
+    $this->backdropLogin($this->admin_user);
 
     $menu_name = 'navigation';
 
     // Add a node to be used as a link for menu links.
-    $node = $this->drupalCreateNode(array('type' => 'page'));
+    $node = $this->backdropCreateNode(array('type' => 'page'));
 
     // Add a menu link.
     $item = $this->crudMenuLink(0, 0, 'node/' . $node->nid, $menu_name);
 
-    $this->drupalGet('admin/structure/menu/item/' . $item['mlid'] . '/edit');
+    $this->backdropGet('admin/structure/menu/item/' . $item['mlid'] . '/edit');
     $this->assertMenuAttributes('options[attributes]', 'new');
 
     // Edit the previously created menu link.
     $item = $this->crudMenuLink($item['mlid'], 0, 'node/' . $node->nid, $menu_name);
 
-    $this->drupalGet('admin/structure/menu/item/' . $item['mlid'] . '/edit');
+    $this->backdropGet('admin/structure/menu/item/' . $item['mlid'] . '/edit');
     $this->assertMenuAttributes('options[attributes]', 'edit');
   }
 }
@@ -171,7 +171,7 @@ class MenuAttributesNodeTestCase extends MenuAttributesTestHelper {
 
   function setUp(array $modules = array()) {
     parent::setUp($modules);
-    $this->drupalLogin($this->admin_user);
+    $this->backdropLogin($this->admin_user);
   }
 
   /**
@@ -182,13 +182,13 @@ class MenuAttributesNodeTestCase extends MenuAttributesTestHelper {
     $edit = array(
       'menu_options[navigation]' => 1,
     );
-    $this->drupalPost('admin/structure/types/manage/page', $edit, t('Save content type'));
+    $this->backdropPost('admin/structure/types/manage/page', $edit, t('Save content type'));
     // Change default parent item to Navigation menu, so we can assert more
     // easily.
     $edit = array(
       'menu_parent' => 'navigation:0',
     );
-    $this->drupalPost('admin/structure/types/manage/page', $edit, t('Save content type'));
+    $this->backdropPost('admin/structure/types/manage/page', $edit, t('Save content type'));
 
     // Create a node.
     $node_title = $this->randomName();
@@ -197,19 +197,19 @@ class MenuAttributesNodeTestCase extends MenuAttributesTestHelper {
       "title" => $node_title,
       "body[$language][0][value]" => $this->randomString(),
     );
-    $this->drupalPost('node/add/page', $edit, t('Save'));
-    $node = $this->drupalGetNodeByTitle($node_title);
+    $this->backdropPost('node/add/page', $edit, t('Save'));
+    $node = $this->backdropGetNodeByTitle($node_title);
     // Assert that there is no link for the node.
-    $this->drupalGet('');
+    $this->backdropGet('');
     $this->assertNoLink($node_title);
 
     // Edit the node, enable the menu link setting, but skip the link title.
     $edit = array(
       'menu[enabled]' => 1,
     );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
     // Assert that there is no link for the node.
-    $this->drupalGet('');
+    $this->backdropGet('');
     $this->assertNoLink($node_title);
 
     // Edit the node and create a menu link with attributes.
@@ -226,13 +226,13 @@ class MenuAttributesNodeTestCase extends MenuAttributesTestHelper {
       'menu[options][attributes][target]' => $this->menu_attributes_new['target'],
       'menu[options][attributes][accesskey]' => $this->menu_attributes_new['accesskey'],
     );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
     // Assert that the link exists.
-    $this->drupalGet('');
+    $this->backdropGet('');
     $this->assertLink($node_title);
 
     // Assert that the link attributes exist.
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $this->assertMenuAttributes('menu[options][attributes]', 'new');
 
     // Edit the node again and change the menu link attributes.
@@ -249,19 +249,19 @@ class MenuAttributesNodeTestCase extends MenuAttributesTestHelper {
       'menu[options][attributes][target]' => $this->menu_attributes_edit['target'],
       'menu[options][attributes][accesskey]' => $this->menu_attributes_edit['accesskey'],
     );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
 
     // Assert that the link attributes exist.
-    $this->drupalGet('node/' . $node->nid . '/edit');
+    $this->backdropGet('node/' . $node->nid . '/edit');
     $this->assertMenuAttributes('menu[options][attributes]', 'edit');
 
     // Edit the node and remove the menu link.
     $edit = array(
       'menu[enabled]' => FALSE,
     );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    $this->backdropPost('node/' . $node->nid . '/edit', $edit, t('Save'));
     // Assert that there is no link for the node.
-    $this->drupalGet('');
+    $this->backdropGet('');
     $this->assertNoLink($node_title);
   }
 }
